@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name  Google+ Commander
 // @author suVene(original: mattn)
-// @version 0.3.2
+// @version 0.3.3
 // @namespace https://github.com/suvene/googlepluscommander
 // @description keybinds for Google+. you can use j/k to scroll, and type 'c' to comment, 's' to share, '+' to +1.
 // @include https://plus.google.com/*
@@ -103,6 +103,24 @@
           mousedown(cancel);
           mouseup(cancel);
         }
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  function submitForm(elem) {
+    if (elem.id.match(/\.f$/)) {
+      var submit = findSubmitElement(elem);
+      if (!submit) {
+        submit = getElementsByTagAndClassName('div', 'n-Ja-xg',
+                   elem.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)[0];
+      }
+      if (submit) {
+        elem.blur();
+        submit.focus();
+        mousedown(submit);
+        mouseup(submit);
         return true;
       }
     }
@@ -293,15 +311,26 @@
   function installEditorKeys(elem) {
     elem.addEventListener('keyup', function(e) {
       var hooked = false;
-      if (hasClass(e.target, 'editable') && e.target.innerHTML.replace(/<[^>]+>/g, '').length == 0) {
-        var c = String.fromCharCode(e.keyCode ? e.keyCode : e.charCode);
-        if (!e.shiftKey) {
-          c = c.toLowerCase();
-        }
-        switch (c) {
-          case '\x1b':
-            hooked = closeForm(e.target);
+      if (hasClass(e.target, 'editable')) {
+        var kc = e.keyCode ? e.keyCode : e.charCode;
+        switch (kc) {
+          case 13: // enter
+            if (e.ctrlKey || e.altKey) {
+              hooked = submitForm(e.target);
+            }
             break;
+          default:
+            var c = String.fromCharCode(kc);
+            if (!e.shiftKey) {
+              c = c.toLowerCase();
+            }
+            switch (c) {
+              case '\x1b': // escape
+                if (e.target.innerHTML.replace(/<[^>]+>/g, '').length == 0) {
+                  hooked = closeForm(e.target);
+                }
+                break;
+            }
         }
       }
       if (!hooked) {
@@ -361,6 +390,12 @@
   function findCancelElement(elem) {
     return findElementFromNext(elem, function(e) {
       return e.id && e.id.match(/\.c(ancel)?$/);
+    });
+  }
+
+  function findSubmitElement(elem) {
+    return findElementFromNext(elem, function(e) {
+      return e.id && e.id.match(/\.post?$/);
     });
   }
 
