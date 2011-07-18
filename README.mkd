@@ -29,6 +29,12 @@ This is userscript for Google+. This script provide shortcut keys to do followin
 * gnm to go to Notifications(mentions).
 * gnP to go to Notifications(phototags).
 
+Options
+-------
+
+* AutoPagerize
+true or false
+
 Install
 -------
 

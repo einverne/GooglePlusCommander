@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name  Google+ Commander
 // @author suVene(original: mattn)
-// @version 0.3.1
+// @version 0.3.2
 // @namespace https://github.com/suvene/googlepluscommander
 // @description keybinds for Google+. you can use j/k to scroll, and type 'c' to comment, 's' to share, '+' to +1.
 // @include https://plus.google.com/*
@@ -9,6 +9,12 @@
 // ==/UserScript==
 
 (function() {
+  // User Options start
+
+  var AutoPagerize = true; // true or false
+
+  // User Options end
+
   function invokeMouseEvent(elem, evname) {
     var e = document.createEvent('MouseEvents');
     e.initMouseEvent(evname, true, true, e.view||window, 0, 0, 0, 0, 0,
@@ -394,7 +400,18 @@
       }
     }
   }
+
+  function installScrollListener() {
+    window.addEventListener('scroll', function() {
+      var b = parseInt((window.scrollY + window.innerHeight) / document.height + 0.1);
+      if (b)
+        click(document.getElementsByClassName('a-f-zd-gb-h')[0]);
+    }, false);
+  }
+
   window.setInterval(install, 1000);
   installGlobalKeys(document.body);
   installExternalScripts();
+  if (AutoPagerize) installScrollListener();
+
 })()
