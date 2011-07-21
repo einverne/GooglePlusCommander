@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name  Google+ Commander
 // @author suVene(original: mattn)
-// @version 0.3.4
+// @version 0.3.5
 // @namespace https://github.com/suvene/googlepluscommander
 // @description keybinds for Google+. you can use j/k to scroll, and type 'c' to comment, 's' to share, '+' to +1.
 // @include https://plus.google.com/*
@@ -172,11 +172,21 @@
       return true;
     },
     'gP': function(e) {
-      location.href = 'https://plus.google.com/photos';
+      var s = location.href.match('/([0-9]{21})/');
+      if (s) {
+        location.href = 'https://plus.google.com/' + s[1] + '/photos';
+      } else {
+        location.href = 'https://plus.google.com/photos';
+      }
       return true;
     },
     'gp': function(e) {
-      location.href = 'https://plus.google.com/me';
+      var s = location.href.match('/([0-9]{21})/');
+      if (s) {
+        location.href = 'https://plus.google.com/' + s[1];
+      } else {
+        location.href = 'https://plus.google.com/me';
+      }
       return true;
     },
     'gc': function(e) {
