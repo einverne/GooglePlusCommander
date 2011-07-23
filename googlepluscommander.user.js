@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name  Google+ Commander
 // @author suVene(original: mattn)
-// @version 0.3.5
+// @version 0.3.6
 // @namespace https://github.com/suvene/googlepluscommander
 // @description keybinds for Google+. you can use j/k to scroll, and type 'c' to comment, 's' to share, '+' to +1.
 // @include https://plus.google.com/*
@@ -442,7 +442,7 @@
       var e = elems[n];
       if (e.id.substring(0, 7) == 'update-' && !hasClass(e, 'gpcommander')) {
         installItemKeys(e);
-        installEvernoteClip(e);
+        //installEvernoteClip(e);
       } else if (hasClass(e, 'editable') && !hasClass(e, 'gpcommander')) {
         installEditorKeys(e);
       }
